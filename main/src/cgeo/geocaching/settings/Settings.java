@@ -636,17 +636,6 @@ public class Settings {
                 && StringUtils.isNotBlank(getString(tokenSecretPrefKeyId, ""));
     }
 
-    public static boolean isGCVoteLoginValid() {
-        return getGCVoteLogin().isValid();
-    }
-
-    @NonNull
-    public static Credentials getGCVoteLogin() {
-        final String username = StringUtils.trimToNull(getString(R.string.pref_username, null));
-        final String password = getString(R.string.pref_pass_vote, null);
-        return new Credentials(username, password);
-    }
-
     @NonNull
     public static String getSignature() {
         return StringUtils.defaultString(getString(R.string.pref_signature, StringUtils.EMPTY));

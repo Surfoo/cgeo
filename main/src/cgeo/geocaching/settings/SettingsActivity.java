@@ -14,7 +14,6 @@ import cgeo.geocaching.connector.gc.GCConnector;
 import cgeo.geocaching.connector.lc.LCConnector;
 import cgeo.geocaching.connector.su.SuConnector;
 import cgeo.geocaching.downloader.DownloaderUtils;
-import cgeo.geocaching.gcvote.GCVote;
 import cgeo.geocaching.maps.MapProviderFactory;
 import cgeo.geocaching.maps.interfaces.MapSource;
 import cgeo.geocaching.maps.mapsforge.v6.RenderThemeHelper;
@@ -224,7 +223,6 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
                 R.string.pref_twitter_trackable_message, R.string.pref_ec_icons, R.string.pref_selected_language }) {
             bindSummaryToStringValue(k);
         }
-        bindGeocachingUserToGCVoteuser();
 
         //PublicFolder initialization
         initPublicFolders(PersistableFolder.values());
@@ -293,10 +291,6 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
         getPreference(R.string.pref_connectorSUActive).setOnPreferenceChangeListener(this);
         setWebsite(R.string.pref_fakekey_su_website, SuConnector.getInstance().getHost());
         getPreference(R.string.preference_screen_su).setSummary(getServiceSummary(Settings.isSUConnectorActive()));
-
-        getPreference(R.string.pref_ratingwanted).setOnPreferenceChangeListener(this);
-        setWebsite(R.string.pref_fakekey_gcvote_website, GCVote.getWebsite());
-        getPreference(R.string.preference_screen_gcvote).setSummary(getServiceSummary(Settings.isRatingWanted()));
 
         getPreference(R.string.pref_connectorGeokretyActive).setOnPreferenceChangeListener(this);
         setWebsite(R.string.pref_fakekey_geokrety_website, "https://geokrety.org");
@@ -781,10 +775,6 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
                 setSuAuthTitle();
                 setConnectedTitle(prefKeyId, Settings.hasOAuthAuthorization(R.string.pref_su_tokenpublic, R.string.pref_su_tokensecret));
                 break;
-            case R.string.pref_fakekey_gcvote_authorization:
-                setAuthTitle(prefKeyId, GCVote.getInstance());
-                setConnectedUsernameTitle(prefKeyId, GCVote.getInstance());
-                break;
             case R.string.pref_fakekey_twitter_authorization:
                 setTwitterAuthTitle();
                 setConnectedTitle(prefKeyId, Settings.hasTwitterAuthorization());
@@ -907,11 +897,6 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
                 setConnectedUsernameTitle(requestCode, ECConnector.getInstance());
                 redrawScreen(R.string.preference_screen_ec);
                 break;
-            case R.string.pref_fakekey_gcvote_authorization:
-                setAuthTitle(requestCode, GCVote.getInstance());
-                setConnectedUsernameTitle(requestCode, GCVote.getInstance());
-                redrawScreen(R.string.init_gcvote);
-                break;
             case R.string.pref_fakekey_twitter_authorization:
                 setTwitterAuthTitle();
                 setConnectedTitle(requestCode, Settings.hasTwitterAuthorization());
@@ -1015,9 +1000,6 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
                 textRestore = preference.getContext().getString(R.string.init_backup_last_no);
             }
             preference.setSummary(textRestore);
-        } else if (isPreference(preference, R.string.pref_ratingwanted)) {
-            preferenceManager.findPreference(getKey(R.string.preference_screen_gcvote)).setSummary(getServiceSummary((Boolean) value));
-            redrawScreen(preferenceManager.findPreference(getKey(R.string.preference_screen_services)));
         } else if (isPreference(preference, R.string.pref_connectorGeokretyActive)) {
             preferenceManager.findPreference(getKey(R.string.preference_screen_geokrety)).setSummary(getServiceSummary((Boolean) value));
             redrawScreen(preferenceManager.findPreference(getKey(R.string.preference_screen_services)));
